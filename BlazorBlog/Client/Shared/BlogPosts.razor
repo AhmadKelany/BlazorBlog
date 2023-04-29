@@ -1,21 +1,19 @@
 ﻿@using BlazorBlog.Shared.Models;
-
-@foreach (BlogPost post in Posts)
+@inject BlazorBlog.Client.Services.IBlogService BlogService
+@foreach (BlogPost post in BlogService.GetBlogPosts())
 {
-    <div style="margin: 20px;">
+    <div style="margin: 25px;">
         <div>
             <h3>@post.Title</h3>
         </div>
         <div>
             @post.Description
         </div>
+        <div>
+            <a href="/posts/@post.Url">Read more...</a>
+        </div>
     </div>
 }
 
 @code {
-    public List<BlogPost> Posts { get; set; } = new()
-    {
-        new() {Id = 1 , Author = "Hamoksha" , Content = "Amazing Stuff" , DateCreated = new(2023,4,1) , Description = "I told you, AMAZING stuff!" , IsDeleted = false , IsPublished = true, Title = "Thermo-Nuclear Boiling of Ostrich Eggs"} ,
-        new() {Id = 2 , Author = "Xeroqil" , Content = "Wonderful Stuff" , DateCreated = new(2023,4,15) , Description = "I informed you, Wonderful stuff!" , IsDeleted = false , IsPublished = true, Title = "Reconstruction of deconstructed words"} ,
-    };
 }
