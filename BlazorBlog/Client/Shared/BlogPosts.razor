@@ -1,6 +1,6 @@
 ﻿@using BlazorBlog.Shared.Models;
 @inject BlazorBlog.Client.Services.IBlogService BlogService
-@foreach (BlogPost post in BlogService.GetBlogPosts())
+@foreach (BlogPost post in posts)
 {
     <div style="margin: 25px;">
         <div>
@@ -16,4 +16,10 @@
 }
 
 @code {
+    private List<BlogPost> posts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        posts = await BlogService.GetBlogPostsAsync();
+    }
 }

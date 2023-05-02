@@ -1,8 +1,19 @@
 ﻿@page "/posts/{url}"
 @using BlazorBlog.Shared.Models;
 @inject BlazorBlog.Client.Services.IBlogService BlogService
-<h3>@post.Title</h3>
-<p>@post.Content</p>
+
+@if (post == null)
+{
+    <span>Loading...</span>
+}
+else
+{
+    <h3>@post.Title</h3>
+    <div>
+        @post.Content
+    </div>
+}
+
 
 @code {
     private BlogPost post;
@@ -10,9 +21,8 @@
     [Parameter]
     public string Url { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        base.OnInitialized();
-        post = BlogService.GetBlogPostByUrl(Url);
+        post = await BlogService.GetBlogPostByUrlAsync(Url);
     }
 }

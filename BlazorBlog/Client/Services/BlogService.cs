@@ -1,21 +1,35 @@
 ﻿using BlazorBlog.Shared.Models;
 
+using System;
+using System.Collections.Generic;
+using System.Net.Http.Json;
+
 namespace BlazorBlog.Client.Services
 {
     public class BlogService : IBlogService
     {
-        List<BlogPost> posts = new()
-            {
-                new() {Id = 1 ,Url = "ostrich-eggs" , Author = "Hamoksha" , Content = "Dolore ut ipsum tempor commodo vero erat lorem aliquip dolores. Nihil invidunt duo justo et diam labore. Magna eum ut ut labore erat tation sadipscing odio amet molestie facilisis luptatum sanctus adipiscing tempor. Ut duo dolor sea ipsum sit gubergren ipsum erat in amet eleifend. Ut labore nonumy at eos tempor ipsum illum duo vero tempor aliquyam takimata ipsum duo no amet elitr. Minim vel et et et lorem nostrud sadipscing quod. Et et diam sadipscing aliquip ipsum tempor eirmod elitr et autem ut vero vero consetetur delenit diam dolor ipsum. Exerci aliquyam vel gubergren labore lobortis molestie sanctus duo accusam sed sadipscing sit. Diam iusto dolore eirmod et amet autem eirmod sea in at amet tation. Sed invidunt et labore nonumy sit nonumy sadipscing labore et sea sadipscing duo voluptua ipsum. Sanctus aliquip et. Diam facer justo diam in takimata iriure tincidunt et sea. Vel amet sed. Amet erat vel lorem amet gubergren possim ipsum sed erat illum diam. Ea eirmod molestie aliquyam rebum stet dolore vero est esse rebum." , DateCreated = new(2023,4,1) , Description = "I told you, AMAZING stuffs!" , IsDeleted = false , IsPublished = true, Title = "Thermo-Nuclear Boiling of Ostrich Eggs"} ,
-                new() {Id = 2 ,Url = "construction-words" , Author = "Xeroqil" , Content = "Wonderful Stuff, Ut eum ea dolore amet nonumy nonumy eos kasd velit eirmod aliquyam. Facilisis eirmod sed sed consectetuer et amet lorem duis et in nobis facilisis. Eos eos stet ipsum et delenit lorem at duo vero consetetur. No sanctus adipiscing invidunt ut et lobortis est. Ipsum at quod dolor. Et hendrerit placerat vero takimata sed elitr et. Lorem magna dolor takimata labore. Eos velit sit. Vero rebum sed gubergren nibh nonumy." , DateCreated = new(2023,4,15) , Description = "I informed you, Wonderful stuff!" , IsDeleted = false , IsPublished = true, Title = "Reconstruction of deconstructed words"} ,
-            };
-        public BlogPost GetBlogPostByUrl(string url)
+        private readonly HttpClient _httpClient;
+
+        public BlogService(HttpClient httpClient)
         {
-            return posts.FirstOrDefault(p => p.Url == url);
+            this._httpClient = httpClient;
+        }
+        //List<BlogPost> posts = new()
+        //    {
+        //        new() {Id = 1 ,Url = "ostrich-eggs" , Author = "Hamoksha" , Content = "Dolore ut ipsum tempor commodo vero erat lorem aliquip dolores. Nihil invidunt duo justo et diam labore. Magna eum ut ut labore erat tation sadipscing odio amet molestie facilisis luptatum sanctus adipiscing tempor. Ut duo dolor sea ipsum sit gubergren ipsum erat in amet eleifend. Ut labore nonumy at eos tempor ipsum illum duo vero tempor aliquyam takimata ipsum duo no amet elitr. Minim vel et et et lorem nostrud sadipscing quod. Et et diam sadipscing aliquip ipsum tempor eirmod elitr et autem ut vero vero consetetur delenit diam dolor ipsum. Exerci aliquyam vel gubergren labore lobortis molestie sanctus duo accusam sed sadipscing sit. Diam iusto dolore eirmod et amet autem eirmod sea in at amet tation. Sed invidunt et labore nonumy sit nonumy sadipscing labore et sea sadipscing duo voluptua ipsum. Sanctus aliquip et. Diam facer justo diam in takimata iriure tincidunt et sea. Vel amet sed. Amet erat vel lorem amet gubergren possim ipsum sed erat illum diam. Ea eirmod molestie aliquyam rebum stet dolore vero est esse rebum." , DateCreated = new(2023,4,1) , Description = "I told you, AMAZING stuffs!" , IsDeleted = false , IsPublished = true, Title = "Thermo-Nuclear Boiling of Ostrich Eggs"} ,
+        //        new() {Id = 2 ,Url = "construction-words" , Author = "Xeroqil" , Content = "Wonderful Stuff, Ut eum ea dolore amet nonumy nonumy eos kasd velit eirmod aliquyam. Facilisis eirmod sed sed consectetuer et amet lorem duis et in nobis facilisis. Eos eos stet ipsum et delenit lorem at duo vero consetetur. No sanctus adipiscing invidunt ut et lobortis est. Ipsum at quod dolor. Et hendrerit placerat vero takimata sed elitr et. Lorem magna dolor takimata labore. Eos velit sit. Vero rebum sed gubergren nibh nonumy." , DateCreated = new(2023,4,15) , Description = "I informed you, Wonderful stuff!" , IsDeleted = false , IsPublished = true, Title = "Reconstruction of deconstructed words"} ,
+        //    };
+        
+
+        public async Task<BlogPost> GetBlogPostByUrlAsync(string url)
+        {
+            BlogPost post = await _httpClient.GetFromJsonAsync<BlogPost>( $"api/blogs/{url}");
+            return post;
         }
 
-        public List<BlogPost> GetBlogPosts()
-        {           
+        public async Task<List<BlogPost>> GetBlogPostsAsync()
+        {
+            List < BlogPost > posts = await _httpClient.GetFromJsonAsync<List<BlogPost>>("api/blogs");
             return posts;
         }
     }
