@@ -23,8 +23,21 @@ namespace BlazorBlog.Client.Services
 
         public async Task<BlogPost> GetBlogPostByUrlAsync(string url)
         {
-            BlogPost post = await _httpClient.GetFromJsonAsync<BlogPost>( $"api/blogs/{url}");
-            return post;
+            //BlogPost post = await _httpClient.GetFromJsonAsync<BlogPost>( $"api/blogs/{url}");
+            //return post;
+
+            HttpResponseMessage result = await _httpClient.GetAsync($"api/blogs/{url}");
+            if (result.IsSuccessStatusCode)
+            {
+                BlogPost post = await _httpClient.GetFromJsonAsync<BlogPost>($"api/blogs/{url}");
+                return post;
+            }
+            else
+            {
+                string msg = await result.Content.ReadAsStringAsync();
+                Console.WriteLine(msg);
+                return new BlogPost { Title = msg };
+            }
         }
 
         public async Task<List<BlogPost>> GetBlogPostsAsync()
