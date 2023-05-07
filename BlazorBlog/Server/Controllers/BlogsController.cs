@@ -1,4 +1,5 @@
-﻿using BlazorBlog.Shared.Models;
+﻿using BlazorBlog.Server.Data;
+using BlazorBlog.Shared.Models;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,11 @@ namespace BlazorBlog.Server.Controllers;
 [ApiController]
 public class BlogsController : ControllerBase
 {
+    BlogsContext _blogContext;
+    public BlogsController(BlogsContext blogsContext)
+    {
+        _blogContext = blogsContext;
+    }
     List<BlogPost> posts = new()
     {
         new() {Id = 1 ,Url = "ostrich-eggs" , Author = "Hamoksha" , Content = "Dolore ut ipsum tempor commodo vero erat lorem aliquip dolores. Nihil invidunt duo justo et diam labore. Magna eum ut ut labore erat tation sadipscing odio amet molestie facilisis luptatum sanctus adipiscing tempor. Ut duo dolor sea ipsum sit gubergren ipsum erat in amet eleifend. Ut labore nonumy at eos tempor ipsum illum duo vero tempor aliquyam takimata ipsum duo no amet elitr. Minim vel et et et lorem nostrud sadipscing quod. Et et diam sadipscing aliquip ipsum tempor eirmod elitr et autem ut vero vero consetetur delenit diam dolor ipsum. Exerci aliquyam vel gubergren labore lobortis molestie sanctus duo accusam sed sadipscing sit. Diam iusto dolore eirmod et amet autem eirmod sea in at amet tation. Sed invidunt et labore nonumy sit nonumy sadipscing labore et sea sadipscing duo voluptua ipsum. Sanctus aliquip et. Diam facer justo diam in takimata iriure tincidunt et sea. Vel amet sed. Amet erat vel lorem amet gubergren possim ipsum sed erat illum diam. Ea eirmod molestie aliquyam rebum stet dolore vero est esse rebum." , DateCreated = new(2023,4,1) , Description = "I told you, AMAZING stuffs!" , IsDeleted = false , IsPublished = true, Title = "API Thermo-Nuclear Boiling of Ostrich Eggs"} ,
@@ -18,13 +24,13 @@ public class BlogsController : ControllerBase
     [HttpGet]
     public ActionResult<List<BlogPost>> GetAllPosts()
     {
-        return Ok(posts);
+        return Ok(_blogContext.BlogPosts);
     }
 
     [HttpGet("{url}")]
     public ActionResult<BlogPost> GetPostByUrl(string url)
     {
-        BlogPost post = posts.FirstOrDefault(x => x.Url == url);
+        BlogPost post = _blogContext.BlogPosts.FirstOrDefault(x => x.Url == url);
         return post != null ? Ok(post) : NotFound($"The post with url: {url} doesn't exist.");
     }
 
