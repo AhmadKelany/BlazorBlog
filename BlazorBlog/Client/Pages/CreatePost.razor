@@ -1,5 +1,17 @@
-﻿<h3>CreatePost</h3>
+﻿@page "/create"
+@using BlazorBlog.Shared.Models;
+
+<h3>Create a New Blog Post</h3>
+
+<EditForm Model="@newPost" OnValidSubmit="CreateNewBlogPost">
+    <button type="submit" class="btn btn-primary">Create</button>
+</EditForm>
 
 @code {
+    BlogPost newPost = new();
 
+    void CreateNewBlogPost()
+    {
+        Console.WriteLine("Created!");
+    }
 }
