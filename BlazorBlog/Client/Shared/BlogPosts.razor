@@ -1,5 +1,7 @@
 ﻿@using BlazorBlog.Shared.Models;
 @inject BlazorBlog.Client.Services.IBlogService BlogService
+
+<a href="/create">Create New</a>
 @foreach (BlogPost post in posts)
 {
     <div style="margin: 25px;">
