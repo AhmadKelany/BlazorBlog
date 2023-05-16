@@ -10,6 +10,9 @@ namespace BlazorBlog.Shared.Models;
 public class BlogPost
 {
     public int Id { get; set; }
+
+    [Required]
+    [StringLength(20)]
     public string Url { get; set; }
     [Required]
     public string Title { get; set; }
