@@ -29,4 +29,12 @@ public class BlogsController : ControllerBase
         return post != null ? Ok(post) : NotFound($"The post with url: {url} doesn't exist.");
     }
 
+    [HttpPost]
+    public async Task<ActionResult<BlogPost>> CreateNewBlogPost(BlogPost post)
+    {
+        _blogContext.BlogPosts.Add(post);
+        await _blogContext.SaveChangesAsync();
+        return Ok(post);
+    }
+
 }

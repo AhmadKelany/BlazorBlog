@@ -6,5 +6,6 @@ namespace BlazorBlog.Client.Services
     {
         Task<List<BlogPost>> GetBlogPostsAsync();
         Task<BlogPost> GetBlogPostByUrlAsync(string url);
+        Task<BlogPost> CreateNewBlogPostAsync(BlogPost newPost);
     }
 }

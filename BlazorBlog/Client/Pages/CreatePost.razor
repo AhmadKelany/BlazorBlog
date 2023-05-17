@@ -1,6 +1,7 @@
 ﻿@page "/create"
 @using BlazorBlog.Shared.Models;
-
+@inject BlazorBlog.Client.Services.IBlogService BlogService;
+@inject NavigationManager NavigationManager;
 <h3>Create a New Blog Post</h3>
 
 <EditForm Model="@newPost" OnValidSubmit="CreateNewBlogPost">
@@ -38,8 +39,9 @@
 @code {
     BlogPost newPost = new();
 
-    void CreateNewBlogPost()
+    async Task CreateNewBlogPost()
     {
-        Console.WriteLine($"Created {newPost.Title}!");
+        var result = await BlogService.CreateNewBlogPostAsync(newPost);
+        NavigationManager.NavigateTo($"posts/{result.Url}");
     }
 }
